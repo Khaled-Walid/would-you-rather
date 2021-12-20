@@ -5,8 +5,9 @@ class QuestionsPage extends Component {
   state = { isAnswerd: false };
   handleChoice = (option) => {
     const { dispatch, authedUser, id } = this.props;
-    dispatch(handleQuestionAnswer(authedUser, id, option));
-    this.setState({ isAnswerd: true });
+    dispatch(handleQuestionAnswer(authedUser, id, option)).then(() =>
+      this.setState({ isAnswerd: true })
+    );
   };
 
   isQuestionAnswerd = () => {
@@ -59,14 +60,16 @@ class QuestionsPage extends Component {
   };
   renderAnswredQuestion = () => {
     const { questions, users, id } = this.props;
-    const totalUsers = Object.keys(users).length;
+
     const question = questions[id];
+    const totalVotes =
+      question["optionOne"].votes.length + question["optionTwo"].votes.length;
     const optionOneVotePercentage = (
-      (question["optionOne"].votes.length / totalUsers) *
+      (question["optionOne"].votes.length / totalVotes) *
       100
     ).toFixed(1);
     const optionTwoVotePercentage = (
-      (question["optionTwo"].votes.length / totalUsers) *
+      (question["optionTwo"].votes.length / totalVotes) *
       100
     ).toFixed(1);
     console.log(optionOneVotePercentage);
